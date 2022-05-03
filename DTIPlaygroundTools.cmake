@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 CMAKE_POLICY(VERSION 2.8)
-#======================================================================================
-# Generation of moc_GUI.cxx does not need all Slicer libs so do it first to avoid processing long cmd line with all libs
 
 set(INSTALL_RUNTIME_DESTINATION dtiplayground-tools)
 set(INSTALL_LIBRARY_DESTINATION dtiplayground-tools)

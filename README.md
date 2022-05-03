@@ -30,7 +30,7 @@ Following OS level library and tools needs to be installed before build (Refer t
 ## Build with CMake
 
 ```
-  $ git clone https://github.com/DTIPlaygroundTools.git
+  $ git clone https://github.com/NIRALUser/DTIPlaygroundTools.git
   $ mkdir DTIPlaygroundTools-build
   $ cd DTIPlaygroundTools-build
   $ cmake ../DTIPlaygroundTools

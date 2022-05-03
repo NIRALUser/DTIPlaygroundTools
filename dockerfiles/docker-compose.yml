@@ -1,0 +1,27 @@
+version: "3.7"
+
+volumes:
+  workingdir:
+    driver: local
+
+services:
+  dtiplayground-build-centos7:
+    container_name: dti-dev-centos7
+    working_dir: /work/src
+    build:
+      context: .
+      dockerfile: Dockerfile.centos7
+    image: dti:centos7-py38
+    user: 320308:1001
+    ipc: host
+    pid: host
+    network_mode: host
+    volumes:
+      - /etc/group:/etc/group:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/shadow:/etc/shadow:ro
+      - /etc/sudoers:/stc/sudoers:ro
+      - /etc/sudoers.d:/etc/sudoers.d:ro
+      - $PWD/..:/work/src
+    command: /work/src/dockerfiles/entrypoint.sh
+

@@ -63,6 +63,7 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
       ${${proj}_DEPENDENCIES}
     )
   set(${extProjName}_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/cmake/)
+  set(${extProjName}_INSTALL_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install)
   set(${extProjName}_BINARY_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/bin)
 
 else()
@@ -80,3 +81,4 @@ endif()
 
 list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS ${extProjName}_DIR:PATH)
 list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS ${extProjName}_BINARY_DIR:PATH)
+list(APPEND ${CMAKE_PROJECT_NAME}_SUPERVUILD_EP_VARS ${extProjName}_INSTALL_DIR:PATH)

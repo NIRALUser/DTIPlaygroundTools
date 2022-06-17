@@ -185,27 +185,28 @@ option(USE_SYSTEM_ANTs "Build using an externally defined version of ANTs" OFF)
 #------------------------------------------------------------------------------
 
 list( APPEND ${LOCAL_PROJECT_NAME}_DEPENDENCIES ITKv4 
-                                                                                      VTK 
-                                                                                      SlicerExecutionModel 
-                                                                                      teem 
-                                                                                      ANTs 
-                                                                                      BRAINSTools 
-                                                                                      BatchMake 
-                                                                                      FFTW 
-                                                                                      JPEG 
-                                                                                      TIFF 
-                                                                                      DCMTK  
-                                                                                      DTIProcess 
-                                                                                      DTI-Reg
-                                                                                      ResampleDTIlogEuclidean
-                                                                                      niral_utilities
-                                                                                      CLAPACK
-                                                                                      #GLUT
-                                                                                      MriWatcher
-                                                                                      AtlasWerks
-                                                                                      JSON 
-                                                                                      ITKTransformTools
-                                                                                      )
+                                                VTK 
+                                                SlicerExecutionModel 
+                                                teem 
+                                                ANTs 
+                                                BRAINSTools 
+                                                BatchMake 
+                                                FFTW 
+                                                JPEG 
+                                                TIFF 
+                                                DCMTK  
+                                                DTIProcess 
+                                                DTI-Reg
+                                                ResampleDTIlogEuclidean
+                                                niral_utilities
+                                                CLAPACK
+                                                #GLUT
+                                                MriWatcher
+                                                AtlasWerks
+                                                JSON 
+                                                ITKTransformTools
+                                                Trafic
+                                                )
 
 set(USE_ITK_Module_MGHIO TRUE)
 set(${PROJECT_NAME}_BUILD_DICOM_SUPPORT TRUE )
@@ -324,6 +325,7 @@ list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS
   GLUT_DIR:PATH
   CONFIGURE_TOOLS_PATHS:BOOL
   JSON_DIR:PATH
+  Trafic_DIR:PATH
   )
 
 foreach( VAR ${LIST_TOOLS} )
@@ -396,28 +398,11 @@ ExternalProject_Add(${proj}-inner
     -DITK_DIR:PATH=${ITK_DIR}
     -DJSON_DIR:PATH=${JSON_DIR}
     -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
-    #-DQt5_DIR:PATH=${Qt5_DIR}
     -DQT_QMAKE_EXECUTABLE:PATH=${QT_QMAKE_EXECUTABLE}
-    -DBUILD_TESTING:BOOL=ON
+    -DBUILD_TESTING:BOOL=OFF
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/${proj}-install
-    # Installation step
-    # Slicer extension
-    # -DDTIAtlasBuilder_BUILD_SLICER_EXTENSION:BOOL=${DTIAtlasBuilder_BUILD_SLICER_EXTENSION}
     -DSlicer_DIR:PATH=${Slicer_DIR}
     -DEXTENSION_NAME:STRING=${EXTENSION_NAME}
-    # For the configuration file (DTIAtlasBuilderSoftConfig.txt.in)
-    # -DImageMathPath:PATH="Helloworld" #${TOOLImageMath}
-    # -DResampleDTIlogEuclideanPath:PATH=${TOOLResampleDTIlogEuclidean}
-    # -DCropDTIPath:PATH=${TOOLCropDTI}
-    # -DdtiprocessPath:PATH=${TOOLdtiprocess}
-    # -DBRAINSFitPath:PATH=${TOOLBRAINSFit}
-    # -DGreedyAtlasPath:PATH=${TOOLGreedyAtlas}
-    # -DdtiaveragePath:PATH=${TOOLdtiaverage}
-    # -DDTI-RegPath:PATH=${TOOLDTI-Reg}
-    # -DunuPath:PATH=${TOOLunu}
-    # -DMriWatcherPath:PATH=${TOOLMriWatcher}
-    # #Pure copy of AtlaskWerks
-    # -DAtlasWerks_DIR:PATH=${AtlasWerks_DIR}
   )
 
 if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )

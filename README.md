@@ -6,18 +6,21 @@
 
 This project builds tools which are used for DTIPlayground project.
 
-These Softwares will be installed
+These Softwares will be installed in dtiplayground-tools directory
 
-- ImageMath
+- niral_utilities (ImageMath, Crop tools, ...)
 - ResampleDTIlogEuclidean
-- CropDTI
-- dtiprocess
-- BRAINSFit
+- DTIProcess (dtiprocess, dtiaverage, dtiestim, ... )
+- BRAINSTools (BRAINSFit)
+- AtlasWerks (GreedyAtlas, ...)
 - GreedyAtlas
-- dtiaverage
+- ANTs
 - DTI-Reg
 - MriWatcher
-- unu
+- ITKTransformTools
+- DCMTK
+- Trafic
+- teem (unu, ...)
 
 ## Build environment
 

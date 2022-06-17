@@ -24,24 +24,26 @@ ProjectDependancyPush(CACHED_proj ${proj})
 # Make sure that the ExtProjName/IntProjName variables are unique globally
 # even if other External_${ExtProjName}.cmake files are sourced by
 # SlicerMacroCheckExternalProjectDependency
-set(extProjName niral_utilities) #The find_package known name
-set(proj        ${extProjName}) #This local name
-
-#if(${USE_SYSTEM_${extProjName}})
-#  unset(${extProjName}_DIR CACHE)
-#endif()
+set(extProjName Trafic) #The find_package known name
+set(proj      Trafic) #This local name
 
 # Sanity checks
 if(DEFINED ${extProjName}_DIR AND NOT EXISTS ${${extProjName}_DIR})
   message(FATAL_ERROR "${extProjName}_DIR variable is defined but corresponds to non-existing directory (${${extProjName}_DIR})")
 endif()
 
-if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" ) )
-  # Set dependency list
-  set(${proj}_DEPENDENCIES ITKv4 VTK SlicerExecutionModel)
+# Set dependency list
+set(${proj}_DEPENDENCIES ITKv4 SlicerExecutionModel VTK niral_utilities)
 
-  # Include dependent projects if any
-  SlicerMacroCheckExternalProjectDependency(${proj})
+# Include dependent projects if any
+SlicerMacroCheckExternalProjectDependency(${proj})
+
+set(niral_utilities_INSTALL ON)
+if(${${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION})
+  set(niral_utilities_INSTALL OFF)
+endif()
+
+if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" ) )
   #message(STATUS "${__indent}Adding project ${proj}")
 
   # Set CMake OSX variable to pass down the external project
@@ -53,30 +55,25 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
       -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
   endif()
 
-  ### --- Project specific additions here
   set(${proj}_CMAKE_OPTIONS
-    -DCOMPILE_CONVERTITKFORMATS:BOOL=ON
-    -DCOMPILE_CROPTOOLS:BOOL=ON  #Required tool for dtiatlasbuilder
-    -DCOMPILE_CURVECOMPARE:BOOL=ON
-    -DCOMPILE_DWI_NIFTINRRDCONVERSION:BOOL=ON
-    -DCOMPILE_IMAGEMATH:BOOL=ON #Required tool for dtiatlasbuilder
-    -DCOMPILE_IMAGESTAT:BOOL=ON
-    -DCOMPILE_MULTIATLASSEG:BOOL=ON
-    -DCOMPILE_POLYDATAMERGE:BOOL=ON
-    -DCOMPILE_POLYDATATRANSFORM:BOOL=ON
-    -DCOMPILE_Unsupported:BOOL=OFF
-    -DUSE_SYSTEM_SlicerExecutionModel:BOOL=ON
-    -DUSE_SYSTEM_ITK:BOOL=ON
-    -DUSE_SYSTEM_VTK:BOOL=ON
-    -DITK_VERSION_MAJOR:STRING=${ITK_VERSION_MAJOR}
-    -DITK_DIR:PATH=${ITK_DIR}
-    -DVTK_DIR:PATH=${VTK_DIR}
-    -DBUILD_TESTING=OFF
+      -DBUILD_TESTING:BOOL=OFF
+      -DBUILD_EXAMPLES:BOOL=OFF
+      -DBUILD_SHARED_LIBS:BOOL=OFF
+      -DTrafic_SUPERBUILD:BOOL=OFF
+      -DCMAKE_INSTALL_PREFIX:PATH=${EXTERNAL_BINARY_DIRECTORY}/${proj}-install
+      -DUSE_SYSTEM_ITK:BOOL=ON
+      -DITK_DIR:PATH=${ITK_DIR}
+      -DUSE_SYSTEM_SlicerExecutionModel:BOOL=ON
+      -DSlicerExecutionModel_DIR:PATH=${SlicerExecutionModel_DIR}
+      -DUSE_SYSTEM_VTK:BOOL=ON
+      -DVTK_DIR:PATH=${VTK_DIR}
+      -Dniral_utilities_DIR:PATH=${niral_utilities_DIR}
+      -Dniral_utilities_INSTALL:BOOL=${niral_utilities_INSTALL}
     )
-
   ### --- End Project specific additions
-  set( ${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/niral_utilities.git )
-  set( ${proj}_GIT_TAG release )
+  set(${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/Trafic.git)
+  set(${proj}_GIT_TAG release)
+
   ExternalProject_Add(${proj}
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}
@@ -86,26 +83,19 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
     LOG_BUILD     0  # Wrap build in script to to ignore log output from dashboards
     LOG_TEST      0  # Wrap test in script to to ignore log output from dashboards
     LOG_INSTALL   0  # Wrap install in script to to ignore log output from dashboards
+    ${cmakeversion_external_update} "${cmakeversion_external_update_value}"
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
-      ${CMAKE_OSX_EXTERNAL_PROJECT_ARGS}
       ${COMMON_EXTERNAL_PROJECT_ARGS}
       ${${proj}_CMAKE_OPTIONS}
-      -DCMAKE_INSTALL_PREFIX:PATH=${EXTERNAL_BINARY_DIRECTORY}/${proj}-install
-      -DINSTALL_RUNTIME_DESTINATION=${INSTALL_RUNTIME_DESTINATION}
-      -DINSTALL_LIBRARY_DESTINATION=${INSTALL_LIBRARY_DESTINATION}
-      -DINSTALL_ARCHIVE_DESTINATION=${INSTALL_LIBRARY_DESTINATION}
 ## We really do want to install in order to limit # of include paths INSTALL_COMMAND ""
     DEPENDS
       ${${proj}_DEPENDENCIES}
   )
-  set(${extProjName}_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/lib/CMake/${proj})
-  set(${extProjName}_INSTALL_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install)
-  set(${extProjName}_BINARY_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/bin)
-  
+  set(${extProjName}_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/lib/CMake/Trafic)
 else()
   if(${USE_SYSTEM_${extProjName}})
-    find_package(${extProjName} REQUIRED)
+    find_package(${extProjName} ${ITK_VERSION_MAJOR} REQUIRED)
     message("USING the system ${extProjName}, set ${extProjName}_DIR=${${extProjName}_DIR}")
   endif()
   # The project is provided using ${extProjName}_DIR, nevertheless since other
@@ -114,8 +104,6 @@ else()
 endif()
 
 list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS ${extProjName}_DIR:PATH)
-list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS ${extProjName}_BINARY_DIR:PATH)
-list(APPEND ${CMAKE_PROJECT_NAME}_SUPERVUILD_EP_VARS ${extProjName}_INSTALL_DIR:PATH)
 
 ProjectDependancyPop(CACHED_extProjName extProjName)
 ProjectDependancyPop(CACHED_proj proj)

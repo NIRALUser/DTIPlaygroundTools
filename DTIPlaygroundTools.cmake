@@ -8,6 +8,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
+set(DTIPlayGroundToolsVersion 0.0.1)
 set(DTI-RegPath     DTI-Reg/bin/DTI-Reg)
 set(dtiaveragePath  DTIProcess/bin/dtiaverage)
 set(dtiprocessPath  DTIProcess/bin/dtiprocess)
@@ -21,21 +22,7 @@ set(ResampleDTIlogEuclideanPath  ResampleDTIlogEuclidean/bin/ResampleDTIlogEucli
 set(ITKTransformToolsPath        ITKTransformTools/bin/ITKTransformTools)
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DTIPlaygroundToolPaths.yml.in ${CMAKE_INSTALL_PREFIX}/${INSTALL_RUNTIME_DESTINATION}/software_paths.yml)
-
-# install(PROGRAMS ${AtlasWerks_BINARY_DIR}/GreedyAtlas 
-#                  ${AtlasWerks_BINARY_DIR}/GreedyWarp 
-#                  ${DTI-Reg_BINARY_DIR}/DTI-Reg 
-#                  ${DTIProcess_BINARY_DIR}/dtiaverage 
-#                  ${DTIProcess_BINARY_DIR}/dtiestim
-#                  ${DTIProcess_BINARY_DIR}/dtiprocess
-#                  ${teem_BINARY_DIR}/unu
-#                  ${niral_utilities_BINARY_DIR}/CropDTI
-#                  ${niral_utilities_BINARY_DIR}/ImageMath
-#                  ${BRAINSTools_BINARY_DIR}/BRAINSFit
-#                  ${ResampleDTIlogEuclidean_BINARY_DIR}/ResampleDTIlogEuclidean
-#                  ${ITKTransformTools_BINARY_DIR}/ITKTransformTools
-# DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-# COMPONENT RUNTIME)
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/DTIPlaygroundToolInfo.yml.in ${CMAKE_INSTALL_PREFIX}/${INSTALL_RUNTIME_DESTINATION}/info.yml)
 
 install (PROGRAMS ${MriWatcher_BINARY_DIR}/MriWatcher
          DESTINATION ${INSTALL_RUNTIME_DESTINATION}

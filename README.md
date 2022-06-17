@@ -13,7 +13,6 @@ These Softwares will be installed in dtiplayground-tools directory
 - DTIProcess (dtiprocess, dtiaverage, dtiestim, ... )
 - BRAINSTools (BRAINSFit)
 - AtlasWerks (GreedyAtlas, ...)
-- GreedyAtlas
 - ANTs
 - DTI-Reg
 - MriWatcher
